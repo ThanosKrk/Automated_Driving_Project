@@ -31,8 +31,6 @@ public class MqttHandler implements MqttCallback {
     private double distanceSum27;
 
 
-
-
     public MqttHandler(String url, DatabaseController db, Heatmap heatmap) {
         this.serverUrl = url;
         this.topics = getTopics();
@@ -99,42 +97,41 @@ public class MqttHandler implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) throws MqttException {
 
         Message = message.toString();
-        if(Message.equals("EOT26")){
-            dist.averageErrorValue(this.distanceSum26,this.timestep);
+        if (Message.equals("EOT26")) {
+            dist.averageErrorValue(this.distanceSum26, this.timestep);
+            return;
+        } else if (Message.equals("EOT27")) {
+
+            dist.averageErrorValue(this.distanceSum27, this.timestep);
             return;
         }
-        else if(Message.equals("EOT27")){
-
-            dist.averageErrorValue(this.distanceSum27,this.timestep);
-            return;
-        }
 
 
-            Message = Message.trim();
+        Message = Message.trim();
 
 
-            String[] fields = Message.split(",");
-            String timestep = fields[0];
-            String d_id = fields[1];
-            String lon = fields[2];
-            String lat = fields[3];
-            String angle = fields[4];
-            String speed = fields[5];
-            String rssi = fields[6];
-            String thput = fields[7];
+        String[] fields = Message.split(",");
+        String timestep = fields[0];
+        String d_id = fields[1];
+        String lon = fields[2];
+        String lat = fields[3];
+        String angle = fields[4];
+        String speed = fields[5];
+        String rssi = fields[6];
+        String thput = fields[7];
 
 
-            Double lonVal = Double.parseDouble(lon);
-            Double latVal = Double.parseDouble(lat);
-            Double speedVal = Double.parseDouble(speed);
-            Double angleVal = Double.parseDouble(angle);
-            Double rssiVal = Double.parseDouble(rssi);
-            Double throughputVal = Double.parseDouble(thput);
-            double timestepVal = Double.parseDouble(timestep);
-            double Id = Double.parseDouble(d_id);
+        Double lonVal = Double.parseDouble(lon);
+        Double latVal = Double.parseDouble(lat);
+        Double speedVal = Double.parseDouble(speed);
+        Double angleVal = Double.parseDouble(angle);
+        Double rssiVal = Double.parseDouble(rssi);
+        Double throughputVal = Double.parseDouble(thput);
+        double timestepVal = Double.parseDouble(timestep);
+        double Id = Double.parseDouble(d_id);
 
 
-        if(Id != 0.0) {
+        if (Id != 0.0) {
 
             System.out.println("Topic: " + topic + "Arrived Message: " + message);
 
@@ -148,10 +145,10 @@ public class MqttHandler implements MqttCallback {
             double predictedThroughput = heatmap.ThroughputFinder(predictedLat, predictedLon);
 
 
-            if( (predictedRssi !=-1) || (predictedThroughput != -1)) {
+            if ((predictedRssi != -1) || (predictedThroughput != -1)) {
 
 
-               this.dbController.insertToDB(timestepVal, Id, latVal, lonVal, this.predLat, this.predLon,rssiVal,throughputVal,this.predRssi,this.predThrouput);
+                this.dbController.insertToDB(timestepVal, Id, latVal, lonVal, this.predLat, this.predLon, rssiVal, throughputVal, this.predRssi, this.predThrouput);
 
             }
 
@@ -167,9 +164,9 @@ public class MqttHandler implements MqttCallback {
             String[] sent = new String[]{sendTimestep, sendId, sendPredLon, sendPredLat, sendAngle, sendSpeed, sendPredRssi, sendPredThput};
             String toSentArray = String.join(",", sent);
 
-            if(timestepVal != 0.0) {
+            if (timestepVal != 0.0) {
 
-                double distance = this.dist.distance(this.predLat,this.predLon,latVal,lonVal);
+                double distance = this.dist.distance(this.predLat, this.predLon, latVal, lonVal);
                 distance = distance * 10000;
 
                 if (Id == 26) {
@@ -187,13 +184,9 @@ public class MqttHandler implements MqttCallback {
             this.predThrouput = predictedThroughput;
 
             sendMessage(topic, toSentArray);
-        }
-        else{
+        } else {
             System.out.println("Server Message");
         }
-
-
-
 
 
     }

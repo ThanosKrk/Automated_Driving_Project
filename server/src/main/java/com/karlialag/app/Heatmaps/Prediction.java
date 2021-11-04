@@ -2,10 +2,10 @@ package com.karlialag.app.Heatmaps;
 
 public class Prediction {
 
-    private static int t=1;
+    private static int t = 1;
 
-    public double[] PredictionImplementation(double lat,double lon,double angle,double speed){
-        double R = 6.371 * Math.pow(10.0,6.0);
+    public double[] PredictionImplementation(double lat, double lon, double angle, double speed) {
+        double R = 6.371 * Math.pow(10.0, 6.0);
         double d = Prediction.t * speed / R;
 
         double latStart = Math.toRadians(lat);
@@ -19,6 +19,6 @@ public class Prediction {
         double latEndDeg = Math.toDegrees(latEndRad);
         double lonEndDeg = Math.toDegrees(lonEndRad);
 
-        return new double[] {latEndDeg,lonEndDeg};
+        return new double[]{latEndDeg, lonEndDeg};
     }
 }

@@ -25,7 +25,7 @@ public class Server {
         xmlTocsv.convertXmlToCsvFiles();
         heatmap.createHeatmaps();
 
-        this.mqttController = new MqttHandler(mqttBrokerUrl,dbController,heatmap);
+        this.mqttController = new MqttHandler(mqttBrokerUrl, dbController, heatmap);
     }
 
     public void createCsvFiles() {

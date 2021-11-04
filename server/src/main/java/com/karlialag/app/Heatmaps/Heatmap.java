@@ -44,24 +44,22 @@ public class Heatmap {
 
         int column = finder.ColumnFinder(lon);
         int row = finder.RowFinder(lat);
-        if(column == -1 || row == -1)
-        {
+        if (column == -1 || row == -1) {
             System.out.println("Coordinates out of grid!");
             return -1;
         }
-        return this.values.rssi[3-row][column];
+        return this.values.rssi[3 - row][column];
     }
 
     public double ThroughputFinder(double lat, double lon) {
         HeatmapValues finder = new HeatmapValues();
         int column = finder.ColumnFinder(lon);
         int row = finder.RowFinder(lat);
-        if(column == -1 || row == -1)
-        {
+        if (column == -1 || row == -1) {
             System.out.println("Coordinates out of grid!");
             return -1;
         }
-        return this.values.throughput[3-row][column];
+        return this.values.throughput[3 - row][column];
     }
 
 
