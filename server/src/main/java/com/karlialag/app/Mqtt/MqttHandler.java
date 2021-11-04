@@ -76,13 +76,15 @@ public class MqttHandler implements MqttCallback {
 
     private List<String> getTopics() {
         List<String> topics = new ArrayList<>();
-        File dir = new File("resources");
+        File dir = new File("src/main/resources");
         File[] files = dir.listFiles();
 
         for (File file : files) {
-            String vehicle_id = file.getName().replaceAll("[^0-9]", "");
-            if (!vehicle_id.isEmpty()) {
-                topics.add(vehicle_id);
+            if(file.getName().endsWith(".xml")) {
+                String vehicle_id = file.getName().replaceAll("[^0-9]", "");
+                if (!vehicle_id.isEmpty()) {
+                    topics.add(vehicle_id);
+                }
             }
         }
         return topics;
